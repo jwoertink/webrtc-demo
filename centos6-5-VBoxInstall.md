@@ -95,4 +95,17 @@ context=default
 exten => 1060,1,Dial(SIP/1060) ; Dialing 1060 will call the SIP client registered to 1060
 exten => 1061,1,Dial(SIP/1061) ; Dialing 1061 will call the SIP client registered to 1061
 ```
-41. `service asterisk restart` (stopping may fail since it shouldn't be running)
+41. `vi /etc/asterisk/manager.conf`
+```
+[general]
+enabled=yes
+port=5038
+bindaddr=0.0.0.0
+;
+[admin]
+secret=password
+read=all
+write=all
+writetimeout=5000
+```
+42. `service asterisk restart` (stopping may fail since it shouldn't be running)
