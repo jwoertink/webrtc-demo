@@ -7,6 +7,9 @@ __(as root)__
 2. Update file to have `DEVICE=eth0` `BOOTPROTO=dhcp` `ONBOOT=yes` `NM_CONTROLLED=no` `HWADDR=YOUR MAC ADDRESS` Check virtualbox settings under network for macaddress. Be sure to use : separation format
 3. `service network restart`
 4. `ifconfig | grep "inet addr"` Check for IP address
+5. `service iptables save`
+6. `service iptables stop`
+7. `chkconfig iptables off`
 
 ### Install Virtualbox Guest Additions
 5. Devices > Insert Guest Additions CD Image
