@@ -72,6 +72,12 @@ GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
 37. `cd libpri*`
 38. `make && make install`
 39. `cd ..`
+40. `tar -xjvf pjproject-2.2.1.tar.bz2`
+40. `cd pjproject*`
+40. `./configure --prefix=/usr/lib64 --enable-shared`
+40. `make dep`
+40. `make && make install`
+40. `ldconfig`
 40. `tar zxvf asterisk*`
 41. `cd asterisk*`
 42. `./configure --libdir=/usr/lib64`
