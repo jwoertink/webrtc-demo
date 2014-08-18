@@ -4,8 +4,24 @@ __(as root)__
 
 ### Setup Network config
 1. `vi /etc/sysconfig/network-scripts/ifcfg-eth0`
-2. Update file to have `DEVICE=eth0` `BOOTPROTO=dhcp` `ONBOOT=yes` `NM_CONTROLLED=no` `HWADDR=YOUR MAC ADDRESS` Check virtualbox settings under network for macaddress. Be sure to use : separation format
-3. `service network restart`
+```
+DEVICE=eth0
+BOOTPROTO=static
+DHCP_HOSTNAME=pbx.local
+HOSTNAME="pbx.local"
+IPV6INIT=yes
+MTU=1500
+NM_CONTROLLED=yes
+ONBOOT=yes
+TYPE=Ethernet
+HWADDR=00:00:00:00:00 #YOUR MAC ADDRESS of VirtualBox
+DNS1=8.8.8.8
+USERCTL=no
+IPADDR=0.0.0.0 #IP YOU NEED i.e. 172.16.1.56
+NETMASK=255.255.255.0
+GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
+```
+3. `service network restart` If any fail, you may need to run `reboot`
 4. `ifconfig | grep "inet addr"` Check for IP address
 5. `service iptables save`
 6. `service iptables stop`
@@ -36,13 +52,14 @@ __(as root)__
 24. `sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config`
 25. `reboot`
 
-### Install Asterisk 11.11.x
+### Install Asterisk Current
 26. `yum install -y wget gcc-c++ ncurses-devel libxml2-devel sqlite-devel libsrtp-devel libuuid-devel openssl-devel iksemel-devel`
 27. `cd /usr/local/src/`
-28. `wget http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases/dahdi-linux-2.9.2.tar.gz`
-28. `wget http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases/dahdi-tools-2.9.2.tar.gz`
-29. `wget http://downloads.asterisk.org/pub/telephony/libpri/releases/libpri-1.4.15.tar.gz`
-30. `wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-11.11.0.tar.gz`
+28. `wget downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz`
+28. `wget downloads.asterisk.org/pub/telephony/dahdi-tools/dahdi-tools-current.tar.gz`
+29. `wget http://www.pjsip.org/release/2.2.1/pjproject-2.2.1.tar.bz2`
+29. `wget downloads.asterisk.org/pub/telephony/libpri/libpri-1.4-current.tar.gz`
+30. `wget downloads.asterisk.org/pub/telephony/asterisk/asterisk-12-current.tar.gz`
 31. `tar zxvf dahdi-linux*`
 32. `cd dahdi-linux*`
 33. `make && make install && make config`
