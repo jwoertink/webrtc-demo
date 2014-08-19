@@ -53,7 +53,7 @@ GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
 25. `reboot`
 
 ### Install Asterisk Current
-26. `yum install -y wget gcc-c++ ncurses-devel libxml2-devel sqlite-devel libsrtp-devel libuuid-devel openssl-devel iksemel-devel`
+26. `yum install -y wget gcc-c++ ncurses-devel libxml2-devel sqlite-devel libsrtp-devel libuuid-devel openssl-devel iksemel-devel jansson-devel`
 27. `cd /usr/local/src/`
 28. `wget downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz`
 28. `wget downloads.asterisk.org/pub/telephony/dahdi-tools/dahdi-tools-current.tar.gz`
@@ -74,7 +74,7 @@ GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
 39. `cd ..`
 40. `tar -xjvf pjproject-2.2.1.tar.bz2`
 40. `cd pjproject*`
-40. `./configure --prefix=/usr/lib64 --enable-shared`
+40. `./configure --prefix=/usr/lib64/ --enable-shared`
 40. `make dep`
 40. `make && make install`
 40. `ldconfig`
