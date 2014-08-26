@@ -77,19 +77,24 @@ GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
 40. `./configure --prefix=/usr/lib64/ --enable-shared`
 40. `make dep`
 40. `make && make install`
+40. pjproject installs files to /usr/lib64/lib
 40. `ldconfig`
+40. `PKG_CONFIG_PATH=/usr/lib64/pkgconfig/`
+40. `export PKG_CONFIG_PATH`
 40. `tar zxvf asterisk*`
 41. `cd asterisk*`
 42. `./configure --libdir=/usr/lib64`
 43. `make menuselect`
 44. Select `Resource Modules` then scroll down to ensure a * is next to `res_srtp`. Press `x` to save & quit
+45. `vi include/asterisk/autoconfig.h` this is a super hack >_<
+46. replace `#undef HAVE_PJ_TRANSATION_GRP_LOCK` with `#define HAVE_PJ_TRANSACTION_GRP_LOCK 1`
 45. `make && make install`
 46. `make samples`
 47. `make config`
 
 ### Configure Asterisk for WebRTC
 48. `mkdir /etc/asterisk/keys`
-49. `/cd /usr/local/src/asterisk*/contrib/scripts`
+49. `cd /usr/local/src/asterisk*/contrib/scripts`
 50. `./ast_tls_cert -C $(currip) -O "My Super Company" -d /etc/asterisk/keys`
 51. `vi /etc/asterisk/http.conf`
 ```
