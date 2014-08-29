@@ -16,3 +16,4 @@ Here are some findings from research into all of this stuff.
 * In CentOS 6.5 this is easily changed by editing the /etc/grub.conf. It's not there in 7
 * There are people that have created patches for specific versions of Asterisk for WebRTC (on github).
 * Linphone is an opensource SIP Softphone that supports VP8 and Opus. It's also cross-platform.
+* Most softphones only support SIP SIMPLE messaging for presence. The standard though is XMPP
