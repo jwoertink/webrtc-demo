@@ -27,6 +27,18 @@ GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
 5. `service iptables stop`
 6. `chkconfig iptables off`
 
+### Update Server Hostname
+7. `vi /etc/sysconfig/network`
+8. `HOSTNAME=pbx.dev` Set the HOSTNAME to `pbx.dev` or whatever you want your hostname to be
+9. `vi /etc/hosts`
+```
+172.16.1.56 pbx.dev #use your IP address
+127.0.0.1 localhost pbx.dev
+::1 localhost pbx.dev
+```
+10. `hostname pbx.dev`
+11. `service network restart`
+
 ### Install Virtualbox Guest Additions
 7. Devices > Insert Guest Additions CD Image
 8. `mkdir /media/VirtualBoxGuestAdditions`
@@ -103,7 +115,6 @@ enabled=yes
 bindaddr=127.0.0.1 ; Replace this with your IP address
 bindport=8088 ; Replace this with the port you want to listen on
 ```
-  * save & exit
 70. `vi /etc/asterisk/sip.conf`
 ```
 [general]
@@ -156,7 +167,6 @@ nat=no
 disallow=all
 allow=ulaw,vp8
 ```
-  * save & exit
 71. `vi /etc/asterisk/extensions.conf`
 ```
 [default]
@@ -179,3 +189,55 @@ writetimeout=5000
 73. `service asterisk restart`
 74. Ensure Linphone is installed, and all Video and Audio codecs are turned on
 75. SIP account should be `sip:1061@CENT_OS_IP_ADDRESS` with `udp` transport
+
+### Install & Configure ejabberd
+76. `yum install -y ejabberd`
+77. `vi /etc/ejabberd/ejabberd.cfg`
+```
+% Find this line and add the pbx.dev
+{hosts, ["localhost", "pbx.dev"]}.
+```
+78. `service ejabberd start`
+79. `ejabberdctl register admin pbx.dev password` to create an account called admin on pbx.dev with the password "password"
+80. `vi /etc/ejabberd/ejabberd.cfg`
+```
+% This goes under the ACCESS CONTROL section
+{acl, admin, {user, "admin", "pbx.dev"}}.
+```
+81. `service ejabberd restart`
+82. Browser to `http://pbx.dev:5280/admin` and use admin/password to log in
+83. Virtual Hosts > pbx.dev > Users - Make a user called "asterisk". Also make yourself a user
+84. `vi /etc/asterisk/xmpp.conf`
+```
+[general]
+autoregister=yes
+autoprune-no
+;
+[ejabberd]
+type=client
+serverhost=pbx.dev
+username=asterisk@pbx.dev
+secret=password ;your password you chose for asterisk
+priority=1
+port=5222
+usetls=no
+usesasl=yes
+status=available
+statusmessage="It's Asterisk!"
+timeout=5
+```
+85. `asterisk -r`
+86. `module reload res_xmpp` - should show reloading
+87. `xmpp show connections` - should show 1 client connected. If so, then `exit`
+88. `vi /etc/asterisk/extensions.conf`
+```
+; replace the exten 1061 dialplan with this
+exten => 1061,1,Set(JSTATUS=${JABBER_STATUS(ejabberd,youruser@pbx.dev/Desktop)}) ; /Desktop is the resource you will set in your xmpp client like Adium/Pidgin
+same => n,GotoIf($[0${JSTATUS}=1]?available:unavailable)
+same => n(available), JabberSend(ejabberd,youruser@pbx.dev,"Incoming call from ${CALLERID(num)}")
+same => n,Dial(SIP/1061)
+same => n,Hangup()
+same => n(unavailable),JabberSend(ejabberd,youruser@pbx.dev,"Missed call from ${CALLERID(num)}")
+; do other dialplan stuff when you're not available
+```
+89. `service asterisk restart`
