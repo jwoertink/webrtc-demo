@@ -1,4 +1,5 @@
 # CentOS 6.5 64bit for VirtualBox with FreeSWITCH Setup
+**UNTESTED**
 
 __(as root)__
 
