@@ -7,8 +7,8 @@ __(as root)__
 ```
 DEVICE=eth0
 BOOTPROTO=static
-DHCP_HOSTNAME=pbx.local
-HOSTNAME="pbx.local"
+DHCP_HOSTNAME=pbx.dev
+HOSTNAME="pbx.dev"
 IPV6INIT=yes
 MTU=1500
 NM_CONTROLLED=yes
@@ -93,13 +93,14 @@ GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
 53. `ldconfig`
 54. `PKG_CONFIG_PATH=/usr/lib64/pkgconfig/`
 55. `export PKG_CONFIG_PATH`
+55. `cd ..`
 56. `tar zxvf asterisk*`
 57. `cd asterisk*`
 58. `./configure --libdir=/usr/lib64`
 59. `make menuselect`
 60. Select `Resource Modules` then scroll down to ensure a * is next to `res_srtp`. Press `x` to save & quit
 61. `vi include/asterisk/autoconfig.h` this is a super hack >_<
-62. replace `#undef HAVE_PJ_TRANSATION_GRP_LOCK` with `#define HAVE_PJ_TRANSACTION_GRP_LOCK 1`
+62. replace `#undef HAVE_PJ_TRANSACTION_GRP_LOCK` with `#define HAVE_PJ_TRANSACTION_GRP_LOCK 1`
 63. `make && make install`
 64. `make samples`
 65. `make config`
@@ -121,6 +122,8 @@ bindport=8088 ; Replace this with the port you want to listen on
 context=default
 allowguest=no
 allowoverlap=no
+accept_outofcall_message=yes
+outofcall_message_context=default
 realm=127.0.0.1 ; Replace this with your IP address
 udpbindaddr=127.0.0.1 ; Replace this with your IP address
 transport=ws,wss,udp
@@ -150,7 +153,7 @@ dtlssetup=actpass ; Tell Asterisk to use actpass SDP parameter when setting up D
 videosupport=yes
 nat=no
 disallow=all
-allow=ulaw,vp8
+allow=ulaw,vp8,h264
 ;
 [1061] ; This will be the legacy SIP client
 type=friend
@@ -205,7 +208,7 @@ writetimeout=5000
 {acl, admin, {user, "admin", "pbx.dev"}}.
 ```
 81. `service ejabberd restart`
-82. Browser to `http://pbx.dev:5280/admin` and use admin/password to log in
+82. Browse to `http://pbx.dev:5280/admin` and use admin/password to log in
 83. Virtual Hosts > pbx.dev > Users - Make a user called "asterisk". Also make yourself a user
 84. `vi /etc/asterisk/xmpp.conf`
 ```
