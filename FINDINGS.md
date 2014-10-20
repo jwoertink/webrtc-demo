@@ -17,3 +17,4 @@ Here are some findings from research into all of this stuff.
 * There are people that have created patches for specific versions of Asterisk for WebRTC (on github).
 * Linphone is an opensource SIP Softphone that supports VP8 and Opus. It's also cross-platform.
 * Most softphones only support SIP SIMPLE messaging for presence. The standard though is XMPP
+* Setting up VirtualBox on OSX may run into some issues with using a Bridged network. If this is the case, you can use NAT, then set your network config (in CentOS) to use `BOOTPROTO=dhcp` along with a few other small changes. Then just use the port forwarding option in VirtualBox to access everything from OSX.
