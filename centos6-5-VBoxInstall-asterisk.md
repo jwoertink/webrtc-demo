@@ -89,8 +89,10 @@ GATEWAY=0.0.0.0 #YOUR GATEWAY i.e. 172.16.1.1
 49. `./configure --prefix=/usr/lib64/ --enable-shared`
 50. `make dep`
 51. `make && make install`
-52. pjproject installs files to /usr/lib64/lib
+52. pjproject installs files to /usr/lib64/lib `cd /usr/lib64/lib` `mv lib* ..` `mv pkgconfig/libpjproject.pc ../pkgconfig/`
+53. `cd /usr/local/src/pjproject*`
 53. `ldconfig`
+54. `ldconfig -p | grep pj` should return a huge list of symlinked .so files
 54. `PKG_CONFIG_PATH=/usr/lib64/pkgconfig/`
 55. `export PKG_CONFIG_PATH`
 55. `cd ..`
@@ -214,7 +216,7 @@ writetimeout=5000
 ```
 [general]
 autoregister=yes
-autoprune-no
+autoprune=no
 ;
 [ejabberd]
 type=client
