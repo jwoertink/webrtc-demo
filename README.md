@@ -3,6 +3,7 @@
 ### Dependencies
 1. [Download CentOS 6.5](http://isoredirect.centos.org/centos/6/isos/x86_64/) - I used the DVD1to2.torrent, but I think the main install is just DVD1
 2. [Download Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+3. [Download Linphone](http://www.linphone.org/downloads-for-desktop.html)
 
 ### VirtualBox Config
 1. Make a new VM
