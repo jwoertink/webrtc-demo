@@ -1,4 +1,7 @@
-var ua, server;
+var ua, server, callOptions, session;
+var localVideo = document.getElementById('local');
+var remoteVideo = document.getElementById('remote');
+
 var login = function(e) {
   e.preventDefault();
 
@@ -7,12 +10,50 @@ var login = function(e) {
   server = document.querySelector('#server').value;
 
   var configuration = {
-    'ws_servers': ('ws://' + server + ':8088/ws'),
-    'uri': ('sip:' + username + '@' + server),
-    'password': password
+    register: true,
+    registerExpires: 90,
+    registrarServer: ('sip:' + server),
+    wsServers: ('ws://' + server + ':8088/ws'),
+    uri: ('sip:' + username + '@' + server),
+    authorizationUser: username,
+    password: password,
+    displayName: username,
+    hackIpInContact: true,
+    traceSip: true,
+    log: { level: 'debug' },
+    stunServers: 'stun:stun.l.google.com:19302'
   };
-  ua = new JsSIP.UA(configuration);
+  callOptions = {
+    media: {
+      constraints: { audio: true, video: true } ,
+      render: {
+        local: { video: localVideo },
+        remote: { video: remoteVideo }
+      }
+    }
+  };
+
+  ua = new SIP.UA(configuration);
   ua.start();
+  ua.on('invite', function(incomingCall){
+    session = incomingCall;
+    session.accept(callOptions);
+    session.on('bye', function() {
+      session = null;
+    });
+  });
+  ua.on('connected', function() {
+    console.log('connected');
+  });
+  ua.on('unregistered', function(cause) {
+    console.log('unregistered', cause);
+  });
+  ua.on('registrationFailed', function(cause) {
+    console.log('registrationFailed', cause);
+  });
+  ua.on('disconnected', function(cause) {
+    console.log('disconnected', cause);
+  });
 };
 
 var makeCall = function(e) {
@@ -22,39 +63,9 @@ var makeCall = function(e) {
     alert('You must be logged in first');
     return false;
   } else {
-    var localVideo = document.getElementById('local');
-    var remoteVideo = document.getElementById('remote');
-    var eventHandlers = {
-      'progress': function(e) {
-        console.log('call is in progress');
-      },
-      'failed': function(e) {
-        console.log('call failed with cause: '+ e.data.cause);
-      },
-      'ended': function(e) {
-        console.log('call ended with cause: '+ e.data.cause);
-      },
-      'confirmed': function(e) {
-        var rtcSession = e.sender;
-        console.log('call confirmed');
-
-        // Attach local stream to selfView
-        if (rtcSession.getLocalStreams().length > 0) {
-          localVideo.src = window.URL.createObjectURL(rtcSession.getLocalStreams()[0]);
-        }
-        // Attach remote stream to remoteView
-        if (rtcSession.getRemoteStreams().length > 0) {
-          remoteVideo.src = window.URL.createObjectURL(rtcSession.getRemoteStreams()[0]);
-        }
-      }
-    };
-    var options = {
-      'eventHandlers': eventHandlers,
-      'mediaConstraints': {'audio': true, 'video': true}
-    };
     var extension = document.querySelector('#extension').value;
     var target = 'sip:'+extension+'@'+server;
-    ua.call(target, options);
+    session = ua.invite(target, callOptions);
   }
 };
 
