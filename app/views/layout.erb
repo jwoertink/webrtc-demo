@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>WebRTC Demo</title>
+    <link rel="stylesheet" href="bootstrap.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="page-header">WebRTC SIP Demo</h2>
+      <form class="form-inline">
+        <div class="row">
+          <div class="col-sm-2">
+            <label>Server</label>
+            <input type="text" name="server" value="" placeholder="server" class="form-control" id="server" />
+          </div>
+          <div class="col-sm-2">
+            <label>Username</label>
+            <input type="text" name="server" value="" placeholder="username" class="form-control" id="username" />
+          </div>
+          <div class="col-sm-2">
+            <label>Password</label>
+            <input type="password" name="server" value="" placeholder="password" class="form-control" id="password" />
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-default" id="login">Login</button>
+          </div>
+          <div class="col-sm-2">
+            <label>Extension</label>
+            <input type="text" name="server" value="" placeholder="extension" class="form-control" id="extension" />
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-default" id="call">Call</button>
+          </div>
+        </div>
+      </form>
+      <div class="videos">
+        <video id="remote">
+
+        </video>
+        <video id="local" muted>
+
+        </video>
+      </div>
+    </div>
+    <script src="sip.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

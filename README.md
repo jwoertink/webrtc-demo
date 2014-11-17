@@ -20,3 +20,7 @@
 1. follow directions
 2. When installed and booted open the `centos6-5-VBoxInstall.md` file
 3. follow more directions
+
+### Running the sample app
+1. It's a [Sinatra](http://sinatrarb.com/) app. So install ruby, and bundle.
+2. Run `rackup` from the app directory
