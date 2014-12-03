@@ -3,7 +3,7 @@ execute 'sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config'
 
 # Shutdown the firewall stuff
 service 'iptables' do
-  action [:save, :stop]
+  action [:stop]
 end
 execute 'chkconfig iptables off'
 
