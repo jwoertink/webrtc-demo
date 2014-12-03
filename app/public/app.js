@@ -34,7 +34,6 @@ var login = function(e) {
   };
 
   ua = new SIP.UA(configuration);
-  ua.start();
   ua.on('invite', function(incomingCall){
     session = incomingCall;
     session.accept(callOptions);
