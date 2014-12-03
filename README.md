@@ -1,9 +1,12 @@
 # Getting started with WebRTC
+There are 2 setups. The Manual setup, and the Vagrant setup.
+
+## Manual Setup
 
 ### Dependencies
-1. [Download CentOS 6.5](http://isoredirect.centos.org/centos/6/isos/x86_64/) - I used the DVD1to2.torrent, but I think the main install is just DVD1
-2. [Download Virtualbox](https://www.virtualbox.org/wiki/Downloads)
-3. [Download Linphone](http://www.linphone.org/downloads-for-desktop.html)
+* [Download CentOS 6.5](http://isoredirect.centos.org/centos/6/isos/x86_64/) - I used the DVD1to2.torrent, but I think the main install is just DVD1
+* [Download Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+* [Download Linphone](http://www.linphone.org/downloads-for-desktop.html)
 
 ### VirtualBox Config
 1. Make a new VM
@@ -15,12 +18,38 @@
 7. Click Network
 8. Select Attached to Bridged Adapter
 9. Click `ok` and boot that bad boy.
+10. When installed and booted open the `centos6-5-VBoxInstall-asterisk.md` file
 
-### Installing CentOS
-1. follow directions
-2. When installed and booted open the `centos6-5-VBoxInstall.md` file
-3. follow more directions
+## Vagrant Setup
 
-### Running the sample app
-1. It's a [Sinatra](http://sinatrarb.com/) app. So install ruby, and bundle.
+### Dependencies
+* [Vagrant](https://www.vagrantup.com/downloads.html)
+* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+* [ChefDK](http://downloads.getchef.com/chef-dk)
+* `vagrant plugin install vagrant-berkshelf`
+* `vagrant plugin install vagrant-omnibus`
+
+**note**: all `vagrant` commands should be run from the *vagrant* directory.
+
+### Building
+
+`vagrant up`
+
+### Destroying
+
+`vagrant destroy`
+
+### Logging in
+
+`ssh root@IP_ADDRESS` password is "vagrant"
+
+Optionally, you can use `vagrant ssh` to SSH as the "vagrant" user. Then use `sudo su -` to return to the root user.
+
+
+## Running the sample app
+1. It's a [Sinatra](http://sinatrarb.com/) app. So download and install ruby, then bundle.
 2. Run `rackup` from the app directory
+
+
+# Note
+I haven't used FreeSwitch. I'd love to have some instructions on here, but someone will need to send a pull request. For now, everything will be based off Asterisk.
