@@ -1,0 +1,7 @@
+name 'apache'
+maintainer 'Jeremy Woertink'
+maintainer_email 'jeremywoertink@gmail.com'
+license 'WTFPL'
+description 'Installs/Configures apache'
+long_description 'Installs and sets up the httpd service for CentOS'
+version '0.1.0'
