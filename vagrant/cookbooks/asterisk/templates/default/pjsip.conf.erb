@@ -1,0 +1,35 @@
+[transport-ws]
+type=transport
+protocol=ws
+bind=0.0.0.0
+
+<% @extensions.each do |user| %>
+[<%= user['username'] %>]
+type=aor
+max_contacts=2
+remove_existing=yes
+
+[<%= user['username'] %>]
+type=auth
+auth_type=userpass
+password=<%= user['password'] %>
+username=<%= user['username'] %>
+realm=<%= @host %>
+
+[<%= user['username'] %>]
+type=endpoint
+disallow=all
+allow=ulaw,vp8,h264
+context=default
+auth=<%= user['username'] %>
+aors=<%= user['username'] %>
+media_encryption=dtls
+dtls_verify=fingerprint
+dtls_cert_file=<%= @keys_dir %>/asterisk.pem
+dtls_ca_file=<%= @keys_dir %>/ca.crt
+dtls_setup=actpass
+use_avpf=yes
+ice_support=yes
+media_use_received_transport=yes
+
+<% end %>
