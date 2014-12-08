@@ -25,11 +25,12 @@ There are 2 setups. The Manual setup, and the Vagrant setup.
 ### Dependencies
 * [Vagrant](https://www.vagrantup.com/downloads.html)
 * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-* [ChefDK](http://downloads.getchef.com/chef-dk)
-* `vagrant plugin install vagrant-berkshelf`
-* `vagrant plugin install vagrant-omnibus`
+* [Ansible](http://docs.ansible.com/intro_installation.html#installing-the-control-machine)
 
 **note**: all `vagrant` commands should be run from the *vagrant* directory.
+
+### Configuring
+Edit the `vagrant/Vagrantfile` with your options, then take a look at the `playbook.yml` file to edit the options you need there.
 
 ### Building
 
