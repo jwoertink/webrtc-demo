@@ -1,44 +1,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# The static IP address you'll use for this VirtualBox
-ENV['ASTERISK_HOST'] = "127.0.0.1"
-
-# The name of your VirtualBox
-ENV['ASTERISK_BOX_NAME'] = "AsteriskPBX"
-
-ENV['EJABBERD_HOST_IP'] = ENV['ASTERISK_HOST']
-
-# The name you want to assign as your host. When using locally, you can edit your machine's hosts file to alias the ASTERISK_HOST to this.
-ENV['VM_HOSTNAME'] = 'pbx.local'
-
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "tsubakimoto_s/ansible-centos"
+  config.vm.box = "xcezx/centos6.5-with-ansible"
+  config.vm.hostname = "pbx.local"
 
-  config.vm.hostname = ENV['VM_HOSTNAME']
+  config.vm.network "public_network", ip: "0.0.0.0"
 
-  # Create a public network, which generally matched to bridged network.
-  # Bridged networks make the machine appear as another physical device on
-  # your network.
-  config.vm.network "public_network", ip: ENV['ASTERISK_HOST']
-
-  # If true, then any SSH connections made will enable agent forwarding.
-  # Default value: false
   config.ssh.forward_agent = true
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
   config.vm.provider "virtualbox" do |vbox|
-    vbox.name = ENV['ASTERISK_BOX_NAME']
+    vbox.name = "AnsiblePBX"
     vbox.memory = 512
   end
-
-  config.berkshelf.enabled = true
 
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "playbook.yml"

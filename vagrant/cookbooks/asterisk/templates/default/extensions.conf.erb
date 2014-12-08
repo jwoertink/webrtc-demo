@@ -1,9 +1,0 @@
-[general]
-static=yes
-writeprotect=no
-clearglobalvars=no
-
-[default]
-<% @extensions.each do |ext| %>
-exten => <%= ext['extension'] %>,1,Dial(SIP/<%= ext['extension'] %>)
-<% end %>

@@ -1,0 +1,7 @@
+---
+- name: Install Apache
+  yum: name=httpd state=latest
+- name: Copy index.html file over
+  template: src=apache/index.html.j2 dest=/var/www/html/index.html
+  notify:
+    - reload apache

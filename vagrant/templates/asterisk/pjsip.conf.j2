@@ -1,0 +1,35 @@
+[transport-ws]
+type=transport
+protocol=ws
+bind=0.0.0.0
+
+{% for user in asterisk.extensions %}
+[{{user.extension}}]
+type=aor
+max_contacts=2
+remove_existing=yes
+
+[{{user.extension}}]
+type=auth
+auth_type=userpass
+password={{user.password}}
+username={{user.username}}
+realm={{ip_address}}
+
+[{{user.extension}}]
+type=endpoint
+disallow=all
+allow=ulaw,vp8,h264
+context=default
+auth={{user.extension}}
+aors={{user.extension}}
+media_encryption=dtls
+dtls_verify=fingerprint
+dtls_cert_file=/etc/asterisk/keys/asterisk.pem
+dtls_ca_file=/etc/asterisk/keys/ca.crt
+dtls_setup=actpass
+use_avpf=yes
+ice_support=yes
+media_use_received_transport=yes
+
+{% endfor %}

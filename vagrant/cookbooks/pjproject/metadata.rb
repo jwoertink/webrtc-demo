@@ -1,7 +1,0 @@
-name 'pjproject'
-maintainer 'Jeremy Woertink'
-maintainer_email 'jeremywoertink@gmail.com'
-license 'WTFPL'
-description 'Installs/Configures pjsip'
-long_description 'Installs/Configures pjsip'
-version '0.1.0'

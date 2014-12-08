@@ -1,10 +1,4 @@
 ---
-- name: Disable SELINUX
-  selinux: state=disabled
-- name: Stop the iptables
-  service: name=iptables state=stopped
-- name: Make sure iptables is not loaded
-  command: chkconfig iptables off
 - name: Update all the things
   yum: name=* state=latest
 - name: I don't really know what this is for
@@ -33,6 +27,7 @@
     - jansson-devel
     - kernel-devel
     - kernel-headers
+    - libselinux-python
     - libsrtp-devel
     - libtermcap-devel
     - libtiff-devel
@@ -63,3 +58,9 @@
     - tftp-server
     - vim
     - wget
+- name: Disable SELINUX
+  selinux: state=disabled
+- name: Stop the iptables
+  service: name=iptables state=stopped
+- name: Make sure iptables is not loaded
+  command: chkconfig iptables off

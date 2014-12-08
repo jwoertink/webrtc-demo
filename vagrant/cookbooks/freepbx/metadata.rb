@@ -1,7 +1,0 @@
-name 'freepbx'
-maintainer 'Jeremy Woertink'
-maintainer_email 'jeremywoertink@gmail.com'
-license 'WTFPL'
-description 'Installs/Configures freepbx'
-long_description 'Installs/Configures freepbx'
-version '0.1.0'

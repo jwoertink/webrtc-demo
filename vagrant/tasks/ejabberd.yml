@@ -1,0 +1,13 @@
+---
+- name: Download ejabberd
+  yum: name=ejabberd state=latest
+- name: Copy ejabberd.cfg
+  template: src=ejabberd.cfg.j2 dest=/etc/ejabberd/ejabberd.cfg
+  notify:
+    - reload ejabberd
+- name: Add ejabberd users
+  command: ejabberdctl register {{item.username}} {{hostname}} {{item.password}}
+  with_items: asterisk.extensions
+- name: Start ejabberd on boot
+  command: chkconfig --add ejabberd
+- command: chkconfig ejabberd on

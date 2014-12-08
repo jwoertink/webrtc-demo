@@ -1,0 +1,40 @@
+[general]
+context=default
+allowguest=no
+allowoverlap=no
+accept_outofcall_message=yes
+outofcall_message_context=default
+realm={{ip_address}}
+udpbindaddr={{ip_address}}
+transport=ws,wss,udp
+language=en
+icesupport=yes
+videosupport=yes
+nat=auto_force_rport,auto_comedia
+allow=!all,alaw,ulaw,gsm
+
+{% for user in asterisk.extensions %}
+[{{user.extension}}]
+type=friend
+username={{user.username}}
+host=dynamic
+secret={{user.password}}
+context={{user.context}}
+nat=no
+disallow=all
+encryption=yes
+avpf=yes
+icesupport=yes
+callerid="{{user.full_name}} <{{user.extension}}>"
+directmedia=no
+transport=ws,wss,udp
+force_avp=yes
+dtlsenable=yes
+dtlsverify=no
+dtlscertfile=/etc/asterisk/keys/asterisk.pem
+dtlsprivatekey=/etc/asterisk/keys/asterisk.pem
+dtlssetup=actpass
+videosupport=yes
+allow=ulaw,vp8,h264
+
+{% endfor %}

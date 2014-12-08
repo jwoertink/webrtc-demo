@@ -1,0 +1,16 @@
+[general]
+autoregister=yes
+autoprune=no
+
+[ejabberd]
+type=client
+timeout=5
+priority=1
+port=5222
+usetls=no
+usesasl=yes
+serverhost={{hostname}}
+username={{asterisk.xmpp_user.username}}@{{hostname}}
+secret={{asterisk.xmpp_user.password}}
+status={{asterisk.xmpp_user.status}}
+statusmessage="{{asterisk.xmpp_user.message}}"

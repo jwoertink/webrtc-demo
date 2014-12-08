@@ -1,0 +1,38 @@
+---
+- name: Download Asterisk
+  get_url: url=http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-{{asterisk.version}}.tar.gz dest={{system.download_dir}}
+- name: Extract Asterisk
+  unarchive: src={{system.download_dir}}/asterisk-{{asterisk.version}}.tar.gz dest={{system.download_dir}} copy=no
+- name: Configure Asterisk
+  # This fails, but we cover all of it in dependencies anyway
+  # command: chdir={{system.download_dir}}/asterisk-{{asterisk.version}} ./contrib/scripts/install_prereq install
+  command: chdir={{system.download_dir}}/asterisk-{{asterisk.version}} ./configure --libdir=/usr/lib64
+- name: Hack Asterisk to work with pjproject
+  lineinfile: dest={{system.download_dir}}/asterisk-{{asterisk.version}}/include/asterisk/autoconfig.h  insertafter="#undef HAVE_PJ_TRANSACTION_GRP_LOCK" line="#define HAVE_PJ_TRANSACTION_GRP_LOCK 1"
+- name: Install Asterisk
+  command: chdir={{system.download_dir}}/asterisk-{{asterisk.version}} {{ item }}
+  with_items:
+    - make
+    - make install
+    - make config
+- command: chdir={{system.download_dir}}/asterisk-{{asterisk.version}} make samples
+  when: asterisk.install_samples
+- command: chdir={{system.download_dir}}/asterisk-{{asterisk.version}} ldconfig
+  notify:
+    - reload asterisk
+- name: Copy http.conf
+  template: src=asterisk/http.conf.j2 dest=/etc/asterisk/http{{'_custom' if asterisk.freepbx_templates else ''}}.conf
+- name: Copy sip.conf
+  template: src=asterisk/sip.conf.j2 dest=/etc/asterisk/sip{{'_custom' if asterisk.freepbx_templates else ''}}.conf
+- name: Copy pjsip.conf
+  template: src=asterisk/pjsip.conf.j2 dest=/etc/asterisk/pjsip{{'_custom' if asterisk.freepbx_templates else ''}}.conf
+- name: Copy extensions.conf
+  template: src=asterisk/extensions.conf.j2 dest=/etc/asterisk/extensions{{'_custom' if asterisk.freepbx_templates else ''}}.conf
+- name: Copy manager.conf
+  template: src=asterisk/manager.conf.j2 dest=/etc/asterisk/manager{{'_custom' if asterisk.freepbx_templates else ''}}.conf
+- name: Copy rtp.conf
+  template: src=asterisk/rtp.conf.j2 dest=/etc/asterisk/rtp{{'_custom' if asterisk.freepbx_templates else ''}}.conf
+- name: Copy xmpp.conf
+  template: src=asterisk/xmpp.conf.j2 dest=/etc/asterisk/xmpp{{'_custom' if asterisk.freepbx_templates else ''}}.conf
+  notify:
+    - reload asterisk

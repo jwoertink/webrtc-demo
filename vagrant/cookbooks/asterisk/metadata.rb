@@ -1,7 +1,0 @@
-name 'asterisk'
-maintainer 'Jeremy Woertink'
-maintainer_email 'jeremywoertink@gmail.com'
-license 'WTFPL'
-description 'Installs/Configures asterisk'
-long_description 'Installs and configures Asterisk 12.7 on CentOS'
-version '0.1.0'

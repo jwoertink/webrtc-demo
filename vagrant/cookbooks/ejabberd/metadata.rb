@@ -1,7 +1,0 @@
-name 'ejabberd'
-maintainer 'Jeremy Woertink'
-maintainer_email 'jeremywoertink@gmail.com'
-license 'WTFPL'
-description 'Installs/Configures ejabberd'
-long_description 'Installs and configures ejabberd for CentOS'
-version '0.1.0'

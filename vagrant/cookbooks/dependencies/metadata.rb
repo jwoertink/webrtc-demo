@@ -1,7 +1,0 @@
-name 'dependencies'
-maintainer 'Jeremy Woertink'
-maintainer_email 'jeremywoertink@gmail.com'
-license 'WTFPL'
-description 'Installs dependencies'
-long_description 'Installs dependencies needed for all these packages'
-version '0.1.0'

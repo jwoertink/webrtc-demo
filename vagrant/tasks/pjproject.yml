@@ -1,0 +1,21 @@
+---
+- name: Download pjproject
+  get_url: url=http://www.pjsip.org/release/{{pjproject.version}}/pjproject-{{pjproject.version}}.tar.bz2 dest={{system.download_dir}}
+- name: Extract pjproject
+  unarchive: src={{system.download_dir}}/pjproject-{{pjproject.version}}.tar.bz2 dest={{system.download_dir}} copy=no
+- name: Configure pjproject
+  command: chdir={{system.download_dir}}/pjproject-{{pjproject.version}} ./configure --prefix=/usr/lib64/ --enable-shared
+- name: Install pjproject
+  command: chdir={{system.download_dir}}/pjproject-{{pjproject.version}} {{ item }}
+  with_items:
+    - make dep
+    - make
+    - make install
+# This hack is to fix installation on 64bit machines
+- name: Hack pjproject
+  shell: ls /usr/lib64/lib/lib*
+  register: lib_so_files
+- command: chdir=/usr/lib64/lib/ mv -f {{item}} /usr/lib64
+  with_items: lib_so_files.stdout_lines
+- command: mv -f /usr/lib64/lib/pkgconfig/libpjproject.pc /usr/lib64/pkgconfig/
+- command: chdir={{system.download_dir}}/pjproject-{{pjproject.version}} ldconfig

@@ -1,0 +1,50 @@
+---
+- name: Download FreePBX
+  git: repo=http://git.freepbx.org/scm/freepbx/framework.git dest={{system.download_dir}}/freepbx version=release/{{freepbx.version}}
+- name: Set Ownership Permissions
+  file: path={{item}} owner=asterisk group=asterisk recurse=yes
+  with_items:
+    - /etc/asterisk
+    - /var/run/asterisk
+    - /var/lib/asterisk
+    - /var/log/asterisk
+    - /var/spool/asterisk
+    - /usr/lib/asterisk
+    - /var/www
+- name: Install PearDB
+  command: {{item}}
+  with_items:
+    - pear channel-update pear.php.net
+    - pear install db-1.7.14
+- name: Configure Apache for FreePBX
+  command: sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php.ini
+- copy: src=/etc/httpd/conf/httpd.conf dest=/etc/httpd/conf/httpd.conf_orig
+- command: sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/httpd/conf/httpd.conf
+  notify:
+    - reload apache
+- name: Load MySQL
+  command: chkconfig --level 345 mysqld on
+  notify:
+    - start mysql
+- name: Configure MySQL for FreePBX
+  environment: env
+  command: {{item}}
+  with_items:
+    - mysqladmin -u root create asterisk
+    - mysqladmin -u root create asteriskcdrdb
+    - mysql -u root -e "GRANT ALL PRIVILEGES ON asterisk.* TO asteriskuser@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';"
+    - mysql -u root -e "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO asteriskuser@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';"
+    - mysql -u root -e "flush privileges;"
+- name: Install FreePBX
+  environment: env
+  command: {{item}}
+  with_items:
+    - "{{system.download_dir}}/freepbx/start_asterisk start"
+    - "{{system.download_dir}}/install_amp --installdb --username=asteriskuser --password=${ASTERISK_DB_PW}"
+    - amportal chown
+    - amportal a ma installall
+    - amportal chown
+    - amportal a reload
+- file: src=/var/lib/asterisk/moh dest=/var/lib/asterisk/mohmp3 state=link
+- name: Start FreePBX
+  command: amportal start

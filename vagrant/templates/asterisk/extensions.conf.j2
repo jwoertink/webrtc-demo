@@ -1,0 +1,9 @@
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+
+[default]
+{% for ext in asterisk.extensions %}
+exten => {{ext.extension}},1,Dial(SIP/{{ext.extension}})
+{% endfor %}
